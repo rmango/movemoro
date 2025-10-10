@@ -66,8 +66,6 @@ class AudioManager {
         try {
           const notification = new Notification(title, {
             body: body,
-            icon: '/favicon.ico',
-            badge: '/favicon.ico',
             requireInteraction: false,
             silent: true  // We handle sound separately
           });

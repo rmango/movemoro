@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://movemoro.com/sitemap.xml
