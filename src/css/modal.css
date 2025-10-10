@@ -194,6 +194,7 @@
   overflow-y: auto;
   flex: 1;
   min-height: 0;
+  padding: 4px; /* Prevent hover transform and selection outline from being cut off */
 }
 
 .exercise-card {

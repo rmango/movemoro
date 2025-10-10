@@ -6,6 +6,9 @@ class AudioManager {
   constructor() {
     this.isMuted = false;
     this.audioContext = null;
+    this.notificationPermission = 'default';
+    this.permissionRequested = false;
+    this.setupVisibilityHandler();
   }
 
   setMuted(muted) {
@@ -13,16 +16,92 @@ class AudioManager {
   }
 
   /**
+   * Request notification permission for background alerts
+   */
+  async requestNotificationPermission() {
+    if ('Notification' in window) {
+      try {
+        // Check current permission first
+        if (Notification.permission === 'granted') {
+          this.notificationPermission = 'granted';
+        } else if (Notification.permission === 'denied') {
+          this.notificationPermission = 'denied';
+        } else {
+          // Only request if not already decided
+          this.notificationPermission = await Notification.requestPermission();
+        }
+      } catch (error) {
+        console.log('Notification permission error:', error);
+      }
+    }
+  }
+
+  /**
+   * Show browser notification (works even in background)
+   */
+  showNotification(title, body) {
+    if (this.isMuted) return;
+
+    if ('Notification' in window) {
+      // Always check current permission state
+      const currentPermission = Notification.permission;
+
+      if (currentPermission === 'granted') {
+        try {
+          const notification = new Notification(title, {
+            body: body,
+            icon: '/favicon.ico',
+            badge: '/favicon.ico',
+            requireInteraction: false,
+            silent: false
+          });
+
+          // Auto-close after 4 seconds
+          setTimeout(() => notification.close(), 4000);
+
+          // Focus window when notification is clicked
+          notification.onclick = () => {
+            window.focus();
+            notification.close();
+          };
+        } catch (error) {
+          console.error('Error showing notification:', error);
+        }
+      } else if (currentPermission === 'default') {
+        console.log('Notification permission not granted. Please allow notifications.');
+        // Try to request permission again
+        this.requestNotificationPermission();
+      }
+    }
+  }
+
+  /**
+   * Setup handler to resume audio context when page becomes visible
+   */
+  setupVisibilityHandler() {
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && this.audioContext && this.audioContext.state === 'suspended') {
+        this.audioContext.resume();
+      }
+    });
+  }
+
+  /**
    * Play a simple beep using Web Audio API
    * This creates a beep without needing audio files
    */
-  playBeep(frequency = 800, duration = 200) {
+  async playBeep(frequency = 800, duration = 200) {
     if (this.isMuted) return;
 
     try {
       // Create audio context if it doesn't exist
       if (!this.audioContext) {
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      // Resume audio context if suspended (e.g., page was in background)
+      if (this.audioContext.state === 'suspended') {
+        await this.audioContext.resume();
       }
 
       const oscillator = this.audioContext.createOscillator();
@@ -48,14 +127,36 @@ class AudioManager {
   }
 
   /**
+   * Creates a simple notification sound that works even when page is in background
+   * Uses data URI to create an inline audio file
+   */
+  playSimpleNotification() {
+    if (this.isMuted) return;
+
+    try {
+      // Use Audio element which can play in background
+      const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBjGH0fPTgjMGHm7A7+OZURE');
+      audio.volume = 0.5;
+      audio.play().catch(err => console.error('Error playing notification:', err));
+    } catch (error) {
+      console.error('Error creating notification sound:', error);
+    }
+  }
+
+  /**
    * Play a pleasant notification sound (two-tone)
    */
   playNotification() {
     if (this.isMuted) return;
 
-    // Play a pleasant two-tone chime
-    this.playBeep(800, 150);
-    setTimeout(() => this.playBeep(600, 150), 100);
+    // If page is hidden, show browser notification instead
+    if (document.hidden) {
+      this.showNotification('Movemoro', 'Time to check in!');
+    } else {
+      // Play beep for foreground (richer sound)
+      this.playBeep(800, 150);
+      setTimeout(() => this.playBeep(600, 150), 100);
+    }
   }
 
   /**
@@ -64,10 +165,15 @@ class AudioManager {
   playWorkComplete() {
     if (this.isMuted) return;
 
-    // Play an ascending three-tone chime
-    this.playBeep(523, 120); // C
-    setTimeout(() => this.playBeep(659, 120), 100); // E
-    setTimeout(() => this.playBeep(784, 200), 200); // G
+    // If page is hidden, show browser notification instead
+    if (document.hidden) {
+      this.showNotification('Work Session Complete! 🎉', 'Time for a quick exercise to unlock your break!');
+    } else {
+      // Play an ascending three-tone chime
+      this.playBeep(523, 120); // C
+      setTimeout(() => this.playBeep(659, 120), 100); // E
+      setTimeout(() => this.playBeep(784, 200), 200); // G
+    }
   }
 
   /**
@@ -76,9 +182,14 @@ class AudioManager {
   playBreakComplete() {
     if (this.isMuted) return;
 
-    // Play a simple two-tone
-    this.playBeep(600, 150);
-    setTimeout(() => this.playBeep(500, 150), 120);
+    // If page is hidden, show browser notification instead
+    if (document.hidden) {
+      this.showNotification('Break Complete! ⏰', 'Ready to get back to work?');
+    } else {
+      // Play a simple two-tone
+      this.playBeep(600, 150);
+      setTimeout(() => this.playBeep(500, 150), 120);
+    }
   }
 
   /**

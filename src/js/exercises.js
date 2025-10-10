@@ -79,12 +79,26 @@ class ExerciseManager {
     officeExercises = this.filterExercises(officeExercises);
     homeExercises = this.filterExercises(homeExercises);
 
-    // Fallback if filtering removes all exercises
+    // Fallback if filtering removes all exercises - relax difficulty requirement only
     if (officeExercises.length === 0) {
       officeExercises = this.exercises.filter(e => e.environment === 'office' && e.category === 'snack');
+      // Re-apply non-difficulty filters
+      if (this.preferences?.excludeFloorExercises) {
+        officeExercises = officeExercises.filter(e => !this.isFloorExercise(e));
+      }
+      if (this.preferences?.excludeEquipment) {
+        officeExercises = officeExercises.filter(e => !e.equipment || e.equipment.length === 0);
+      }
     }
     if (homeExercises.length === 0) {
       homeExercises = this.exercises.filter(e => e.environment === 'home' && e.category === 'snack');
+      // Re-apply non-difficulty filters
+      if (this.preferences?.excludeFloorExercises) {
+        homeExercises = homeExercises.filter(e => !this.isFloorExercise(e));
+      }
+      if (this.preferences?.excludeEquipment) {
+        homeExercises = homeExercises.filter(e => !e.equipment || e.equipment.length === 0);
+      }
     }
 
     const office = this.getRandomExercise(officeExercises);
@@ -124,6 +138,12 @@ class ExerciseManager {
     // Filter out recently completed exercises
     const recentIds = this.history.slice(-5).map(h => h.id);
     let available = exerciseArray.filter(e => !recentIds.includes(e.id));
+
+    // Also filter out currently displayed exercises to prevent duplicates on regenerate
+    if (this.currentPair && this.currentPair.length > 0) {
+      const currentIds = this.currentPair.map(ex => ex.id);
+      available = available.filter(e => !currentIds.includes(e.id));
+    }
 
     // If we've filtered out everything, use the full array
     if (available.length === 0) {
