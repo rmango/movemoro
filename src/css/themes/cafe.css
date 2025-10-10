@@ -1,0 +1,111 @@
+/* Cozy Cafe Theme */
+[data-theme="cafe"] {
+  /* Colors */
+  --color-primary: #6F4E37;
+  --color-secondary: #DEB887;
+  --color-accent: #CD853F;
+  --color-background: #FFF8DC;
+  --color-surface: #FFFBF0;
+  --color-text: #3E2723;
+  --color-text-light: #8D6E63;
+  --color-success: #8B7355;
+  --color-danger: #A0522D;
+  --color-warning: #D2691E;
+
+  /* Typography - warmer, softer */
+  --font-heading: 'Georgia', 'Times New Roman', serif;
+  --font-body: 'Verdana', 'Geneva', sans-serif;
+
+  /* Border Radius - cozy and round */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+
+  /* Shadows - warm and soft */
+  --shadow-sm: 0 2px 6px rgba(111, 78, 55, 0.1);
+  --shadow-md: 0 4px 12px rgba(111, 78, 55, 0.15);
+  --shadow-lg: 0 8px 24px rgba(111, 78, 55, 0.2);
+}
+
+[data-theme="cafe"] body {
+  background: linear-gradient(135deg, #FFF8DC 0%, #F5DEB3 100%);
+}
+
+[data-theme="cafe"] .header {
+  background: rgba(255, 251, 240, 0.98);
+  backdrop-filter: blur(8px);
+}
+
+[data-theme="cafe"] .logo {
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+[data-theme="cafe"] .mode-display {
+  color: var(--color-secondary);
+  font-family: var(--font-heading);
+  font-style: italic;
+}
+
+[data-theme="cafe"] .timer-time {
+  color: var(--color-primary);
+  font-family: var(--font-mono);
+}
+
+[data-theme="cafe"] .btn {
+  font-weight: 500;
+  border-radius: var(--radius-lg);
+}
+
+[data-theme="cafe"] .btn-primary {
+  background: var(--color-accent);
+  box-shadow: 0 4px 0 rgba(111, 78, 55, 0.2);
+}
+
+[data-theme="cafe"] .btn-primary:not(:disabled):hover {
+  background: var(--color-primary);
+}
+
+[data-theme="cafe"] .footer {
+  color: var(--color-secondary);
+  font-family: var(--font-heading);
+  font-style: italic;
+}
+
+[data-theme="cafe"] .modal-content {
+  background: var(--color-surface);
+  box-shadow: 0 12px 40px rgba(111, 78, 55, 0.25);
+}
+
+[data-theme="cafe"] .modal-title {
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+}
+
+[data-theme="cafe"] .exercise-card {
+  background: #FFFAF0;
+  border: 2px solid var(--color-secondary);
+  border-radius: var(--radius-lg);
+}
+
+[data-theme="cafe"] .exercise-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 6px 16px rgba(111, 78, 55, 0.15);
+}
+
+[data-theme="cafe"] .exercise-card.selected {
+  border-color: var(--color-primary);
+  background: rgba(205, 133, 63, 0.1);
+  box-shadow: 0 8px 20px rgba(111, 78, 55, 0.2);
+}
+
+[data-theme="cafe"] .exercise-badge.office {
+  background: var(--color-secondary);
+  color: var(--color-text);
+}
+
+[data-theme="cafe"] .exercise-badge.home {
+  background: var(--color-accent);
+  color: white;
+}

@@ -1,0 +1,163 @@
+/* Timer Display */
+.timer-display {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: var(--spacing-xl) 0;
+}
+
+.timer-circle {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(-90deg);
+}
+
+.progress-ring-circle {
+  transition: stroke-dashoffset var(--transition-slow);
+  stroke-dasharray: 817; /* 2 * π * 130 */
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+}
+
+.timer-time {
+  font-family: var(--font-mono);
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  position: relative;
+  z-index: 1;
+  user-select: none;
+}
+
+/* Pulsing animation when time is running out */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.timer-time.warning {
+  color: var(--color-warning);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.timer-time.danger {
+  color: var(--color-danger);
+  animation: pulse 0.5s ease-in-out infinite;
+}
+
+/* Reward pulse animation */
+.timer-time.reward-pulse {
+  animation: rewardPulse 1s ease-out;
+}
+
+@keyframes rewardPulse {
+  0% {
+    transform: scale(1);
+    color: var(--color-primary);
+  }
+  25% {
+    transform: scale(1.1);
+    color: var(--color-accent);
+  }
+  50% {
+    transform: scale(1.05);
+    color: var(--color-success);
+  }
+  75% {
+    transform: scale(1.08);
+    color: var(--color-accent);
+  }
+  100% {
+    transform: scale(1);
+    color: var(--color-primary);
+  }
+}
+
+/* Session Progress Dots */
+.session-progress {
+  display: flex;
+  gap: var(--spacing-lg);
+  justify-content: center;
+  margin-top: var(--spacing-lg);
+}
+
+.progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-text-light);
+  opacity: 0.2;
+  transition: all var(--transition-base);
+  box-shadow: inset 0 0 0 2px var(--color-surface);
+}
+
+.progress-dot.completed {
+  background: var(--color-accent);
+  opacity: 1;
+  transform: scale(1.3);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--color-accent) 20%, transparent),
+    0 2px 8px color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+.progress-dot.active {
+  background: var(--color-secondary);
+  opacity: 1;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    transform: scale(1.1);
+    opacity: 1;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-secondary) 20%, transparent);
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.9;
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-secondary) 10%, transparent);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .timer-circle {
+    width: 240px;
+    height: 240px;
+  }
+
+  .progress-ring {
+    width: 240px;
+    height: 240px;
+  }
+
+  .progress-ring-circle {
+    r: 110;
+    cx: 120;
+    cy: 120;
+    stroke-dasharray: 691; /* 2 * π * 110 */
+  }
+
+  .timer-time {
+    font-size: 3rem;
+  }
+
+  .mode-display {
+    font-size: 1rem;
+  }
+}

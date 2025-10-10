@@ -1,0 +1,44 @@
+/* Zen / Meditation Theme */
+[data-theme="zen"] {
+  /* Colors */
+  --color-primary: #4A6D5C;
+  --color-secondary: #8FA399;
+  --color-accent: #D4AF6A;
+  --color-background: #F5F5DC;
+  --color-surface: #FFFFFF;
+  --color-text: #3C3C3C;
+  --color-text-light: #7F8C8D;
+  --color-success: #7FB069;
+  --color-danger: #D88C79;
+  --color-warning: #E6B89C;
+
+  /* Border Radius - more rounded */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* Shadows - softer */
+  --shadow-sm: 0 2px 4px rgba(74, 109, 92, 0.08);
+  --shadow-md: 0 4px 16px rgba(74, 109, 92, 0.12);
+  --shadow-lg: 0 8px 24px rgba(74, 109, 92, 0.15);
+}
+
+[data-theme="zen"] body {
+  background: linear-gradient(135deg, #F5F5DC 0%, #E8E5D5 100%);
+}
+
+[data-theme="zen"] .header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+[data-theme="zen"] .logo {
+  color: var(--color-primary);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+[data-theme="zen"] .footer {
+  font-style: italic;
+  color: var(--color-secondary);
+}

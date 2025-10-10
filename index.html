@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movemoro - Move More, Get More Done</title>
+  <link rel="stylesheet" href="src/css/variables.css">
+  <link rel="stylesheet" href="src/css/main.css">
+  <link rel="stylesheet" href="src/css/timer.css">
+  <link rel="stylesheet" href="src/css/modal.css">
+  <link rel="stylesheet" href="src/css/welcome.css">
+  <link rel="stylesheet" href="src/css/themes/zen.css">
+  <link rel="stylesheet" href="src/css/themes/retro.css">
+  <link rel="stylesheet" href="src/css/themes/gymbro.css">
+  <link rel="stylesheet" href="src/css/themes/cafe.css">
+</head>
+
+<body>
+  <div class="app">
+    <!-- Welcome Panel for First-Time Users -->
+    <div class="welcome-panel" id="welcomePanel">
+      <div class="welcome-content">
+        <button class="welcome-close" id="welcomeCloseBtn"
+          aria-label="Close welcome panel">×</button>
+        <div class="welcome-header">
+          <h2 class="welcome-title">👋 Welcome to Movemoro!</h2>
+          <p class="welcome-subtitle">Move More + Pomodoro</p>
+        </div>
+
+        <p class="welcome-description">
+          Stay focused. Stay active. Earn longer breaks!
+        </p>
+
+        <div class="welcome-steps">
+          <div class="welcome-step">
+            <div class="welcome-step-icon">🎯</div>
+            <div class="welcome-step-content">
+              <strong>Work</strong>
+              <span>Focus for 25 minutes</span>
+            </div>
+          </div>
+          <div class="welcome-step-arrow">↓</div>
+          <div class="welcome-step">
+            <div class="welcome-step-icon">💪</div>
+            <div class="welcome-step-content">
+              <strong>Exercise</strong>
+              <span>Quick movement break</span>
+            </div>
+          </div>
+          <div class="welcome-step-arrow">↓</div>
+          <div class="welcome-step">
+            <div class="welcome-step-icon">☕</div>
+            <div class="welcome-step-content">
+              <strong>Break</strong>
+              <span>Enjoy your rest!</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="welcome-actions">
+          <button class="btn btn-primary" id="welcomeStartBtn">Start Your First Session</button>
+          <button class="btn-link" id="welcomeSkipBtn">Skip tutorial</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Timer Section -->
+    <main class="main-content">
+      <div class="timer-container">
+        <!-- Mode Display -->
+        <div class="mode-display" id="modeDisplay">Work Session</div>
+
+        <!-- Timer Display -->
+        <div class="timer-display">
+          <div class="timer-circle">
+            <svg class="progress-ring" width="280" height="280">
+              <circle class="progress-ring-circle" stroke="var(--color-accent)" stroke-width="6"
+                fill="transparent" r="130" cx="140" cy="140" />
+            </svg>
+            <div class="timer-time" id="timerDisplay">25:00</div>
+          </div>
+        </div>
+
+        <!-- Session Counter -->
+        <div class="session-counter" id="sessionCounter">Session 1 of 4</div>
+
+        <!-- Session Progress Dots -->
+        <div class="session-progress" id="sessionProgress">
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+
+        <!-- Controls -->
+        <div class="timer-controls">
+          <div class="controls-row">
+            <button class="btn btn-primary btn-icon" id="playPauseBtn" aria-label="Start">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="play-icon">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pause-icon"
+                style="display: none;">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+              </svg>
+            </button>
+            <button class="btn btn-secondary btn-icon" id="resetBtn" aria-label="Reset">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                <path d="M21 3v5h-5"></path>
+                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                <path d="M3 21v-5h5"></path>
+              </svg>
+            </button>
+            <button class="btn btn-secondary btn-icon" id="skipBtn"
+              aria-label="Skip to next section">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                <line x1="19" y1="5" x2="19" y2="19"></line>
+              </svg>
+            </button>
+          </div>
+          <div class="controls-row">
+            <button class="btn btn-secondary btn-icon" id="helpBtn" aria-label="Help"
+              title="Show tutorial">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </button>
+            <button class="btn btn-secondary btn-icon" id="settingsBtn" aria-label="Settings">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z">
+                </path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+            <button class="btn btn-secondary btn-icon fullscreen-btn-desktop" id="fullscreenBtn" aria-label="Toggle fullscreen"
+              title="Toggle fullscreen">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fullscreen-icon">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+              </svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="exit-fullscreen-icon" style="display: none;">
+                <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Exercise Selection Modal -->
+  <div class="modal" id="exerciseModal">
+    <div class="modal-content">
+      <h2 class="modal-title">Time to Move! 💪</h2>
+      <p class="modal-subtitle">Choose an exercise to unlock your break</p>
+
+      <div class="exercise-cards" id="exerciseCards">
+        <!-- Exercise cards will be populated by JavaScript -->
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="regenerateBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path
+              d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
+          </svg>
+          Regenerate
+        </button>
+        <button class="btn btn-primary" id="confirmBtn" disabled>Confirm Completion</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal" id="settingsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Settings</h2>
+        <button class="close-btn" id="closeSettingsBtn" aria-label="Close">×</button>
+      </div>
+
+      <div class="settings-form">
+        <div class="form-group">
+          <label for="workDuration">Work Duration (minutes)</label>
+          <input type="number" id="workDuration" min="1" max="60" value="25">
+        </div>
+
+        <div class="form-group">
+          <label for="breakDuration">Break Duration (minutes)</label>
+          <input type="number" id="breakDuration" min="1" max="30" value="5">
+        </div>
+
+        <div class="form-group">
+          <label for="longBreakDuration">Long Break Duration (minutes)</label>
+          <input type="number" id="longBreakDuration" min="1" max="60" value="15">
+        </div>
+
+        <div class="form-group">
+          <label for="sessionsBeforeLongBreak">Sessions Before Long Break</label>
+          <input type="number" id="sessionsBeforeLongBreak" min="2" max="10" value="4">
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" id="audioEnabled" checked>
+            <span>Enable Audio</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label for="themeSelect">Theme</label>
+          <select id="themeSelect" class="theme-select">
+            <option value="professional">Professional</option>
+            <option value="zen">Zen / Meditation</option>
+            <option value="retro">Retro Gaming</option>
+            <option value="gymbro">Gym Bro</option>
+            <option value="cafe">Cozy Cafe</option>
+          </select>
+        </div>
+
+        <hr
+          style="margin: var(--spacing-lg) 0; border: none; border-top: 1px solid var(--color-text-light); opacity: 0.2;">
+
+        <h3 style="margin-bottom: var(--spacing-md); font-size: 1rem; color: var(--color-primary);">
+          Exercise Preferences</h3>
+
+        <div class="form-group">
+          <label for="exerciseDifficulty">Preferred Difficulty</label>
+          <select id="exerciseDifficulty" class="theme-select">
+            <option value="any">Any Difficulty</option>
+            <option value="easy">Easy Only</option>
+            <option value="medium">Medium Only</option>
+            <option value="hard">Hard Only</option>
+          </select>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" id="excludeFloorExercises">
+            <span>Exclude floor exercises (no lying down)</span>
+          </label>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" id="excludeEquipment">
+            <span>Exclude exercises requiring equipment</span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Break Extension Panel -->
+  <div class="break-extension-panel" id="breakExtensionPanel">
+    <div class="extension-content">
+      <button class="extension-close" id="closeExtensionBtn" aria-label="Close">×</button>
+
+      <!-- Success Message (shown after extension) -->
+      <div class="success-message" id="successMessage" style="display: none;">
+        <div class="celebration-particles">
+          <span class="particle">✨</span>
+          <span class="particle">🎉</span>
+          <span class="particle">⭐</span>
+          <span class="particle">💫</span>
+          <span class="particle">✨</span>
+          <span class="particle">🎊</span>
+        </div>
+        <div class="success-icon">🎉</div>
+        <div class="reward-badge" id="rewardBadge">+5 min</div>
+        <div class="success-text">Amazing! Break Extended!</div>
+        <div class="time-comparison">
+          <div class="time-before">
+            <span class="time-label">Was</span>
+            <span class="time-value" id="timeBefore">5:00</span>
+          </div>
+          <div class="time-arrow">→</div>
+          <div class="time-after">
+            <span class="time-label">Now</span>
+            <span class="time-value" id="timeAfter">10:00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="extension-form" id="extensionForm">
+        <div class="extension-header">
+          <h2 class="extension-title">Extend Your Break? ✨</h2>
+        </div>
+        <p class="extension-subtitle">Select a longer exercise below. After you complete it, confirm
+          to add bonus time to your break!</p>
+        <div class="extension-exercises" id="extensionExercises">
+          <!-- Extension exercises will be populated here -->
+        </div>
+        <div class="extension-actions">
+          <button class="btn btn-primary" id="confirmExtensionBtn" disabled>I Completed This
+            Exercise</button>
+          <button class="btn btn-secondary" id="skipExtensionBtn">No Thanks</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="src/js/storage.js"></script>
+  <script src="src/js/audio.js"></script>
+  <script src="src/js/timer.js"></script>
+  <script src="src/js/exercises.js"></script>
+  <script src="src/js/theme.js"></script>
+  <script src="src/js/app.js"></script>
+</body>
+
+</html>
