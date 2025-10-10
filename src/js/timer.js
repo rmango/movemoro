@@ -1,5 +1,6 @@
 /**
  * Accurate Timer class that prevents drift using performance timestamps
+ * Uses setInterval for background tab reliability
  */
 class Timer {
   constructor(durationInSeconds, onTick, onComplete) {
@@ -10,7 +11,7 @@ class Timer {
     this.isRunning = false;
     this.startTime = null;
     this.pausedTime = null;
-    this.animationId = null;
+    this.intervalId = null;
   }
 
   start() {
@@ -33,7 +34,11 @@ class Timer {
     }
 
     if (remaining > 0) {
-      this.animationId = requestAnimationFrame(() => this.tick());
+      // Use setInterval instead of requestAnimationFrame for background tab reliability
+      // Check every 100ms for accuracy
+      if (!this.intervalId) {
+        this.intervalId = setInterval(() => this.tick(), 100);
+      }
     } else {
       this.complete();
     }
@@ -45,9 +50,9 @@ class Timer {
     this.isRunning = false;
     this.pausedTime = this.remaining;
 
-    if (this.animationId) {
-      cancelAnimationFrame(this.animationId);
-      this.animationId = null;
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
     }
   }
 

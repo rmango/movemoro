@@ -48,12 +48,15 @@ class AudioManager {
 
       if (currentPermission === 'granted') {
         try {
+          // Play a sound using Audio element (works better in background)
+          this.playNotificationSound();
+
           const notification = new Notification(title, {
             body: body,
             icon: '/favicon.ico',
             badge: '/favicon.ico',
             requireInteraction: false,
-            silent: false
+            silent: true  // We handle sound separately
           });
 
           // Auto-close after 4 seconds
@@ -68,10 +71,25 @@ class AudioManager {
           console.error('Error showing notification:', error);
         }
       } else if (currentPermission === 'default') {
-        console.log('Notification permission not granted. Please allow notifications.');
         // Try to request permission again
         this.requestNotificationPermission();
       }
+    }
+  }
+
+  /**
+   * Play notification sound using Audio element
+   */
+  playNotificationSound() {
+    try {
+      // Create a simple beep sound using data URI
+      const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBjGH0fPTgjMGHm7A7+OZURE');
+      audio.volume = 0.7;
+      audio.play().catch(err => {
+        console.error('Error playing notification sound:', err);
+      });
+    } catch (error) {
+      console.error('Error creating notification audio:', error);
     }
   }
 
@@ -165,11 +183,13 @@ class AudioManager {
   playWorkComplete() {
     if (this.isMuted) return;
 
-    // If page is hidden, show browser notification instead
-    if (document.hidden) {
-      this.showNotification('Work Session Complete! 🎉', 'Time for a quick exercise to unlock your break!');
-    } else {
-      // Play an ascending three-tone chime
+    // Always show notification AND play sound
+    // If page is hidden, user gets notification
+    // If page is visible, user gets both notification and richer audio
+    this.showNotification('Work Session Complete! 🎉', 'Time for a quick exercise to unlock your break!');
+
+    if (!document.hidden) {
+      // Play an ascending three-tone chime for foreground
       this.playBeep(523, 120); // C
       setTimeout(() => this.playBeep(659, 120), 100); // E
       setTimeout(() => this.playBeep(784, 200), 200); // G
@@ -182,11 +202,13 @@ class AudioManager {
   playBreakComplete() {
     if (this.isMuted) return;
 
-    // If page is hidden, show browser notification instead
-    if (document.hidden) {
-      this.showNotification('Break Complete! ⏰', 'Ready to get back to work?');
-    } else {
-      // Play a simple two-tone
+    console.log('playBreakComplete called, document.hidden:', document.hidden);
+
+    // Always show notification AND play sound
+    this.showNotification('Break Complete! ⏰', 'Ready to get back to work?');
+
+    if (!document.hidden) {
+      // Play a simple two-tone for foreground
       this.playBeep(600, 150);
       setTimeout(() => this.playBeep(500, 150), 120);
     }
