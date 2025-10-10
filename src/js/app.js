@@ -270,11 +270,6 @@ class PomodoroApp {
       // Work session complete - show exercise modal
       this.audio.playWorkComplete();
       this.showExerciseModal();
-
-      // Track work session completion
-      if (window.umami) {
-        umami.track('work-session-complete', { duration: this.settings.workDuration });
-      }
     } else {
       // Break complete
       this.audio.playBreakComplete();
@@ -282,12 +277,6 @@ class PomodoroApp {
       this.sessionCount++;
       this.updateSessionCounter();
       this.switchMode('work');
-
-      // Track break session completion
-      if (window.umami) {
-        const breakType = this.currentMode === 'longBreak' ? 'long' : 'short';
-        umami.track('break-session-complete', { type: breakType });
-      }
 
       // Keep break extension panel visible - it will be hidden when work session starts
     }
@@ -350,16 +339,6 @@ class PomodoroApp {
 
     // Record completion
     this.exerciseManager.recordCompletion(this.selectedExercise);
-
-    // Track exercise selection
-    if (window.umami) {
-      umami.track('exercise-selected', {
-        name: this.selectedExercise.name,
-        category: this.selectedExercise.category,
-        difficulty: this.selectedExercise.difficulty,
-        environment: this.selectedExercise.environment
-      });
-    }
 
     // Close modal
     this.elements.exerciseModal.classList.remove('active');
@@ -522,13 +501,7 @@ class PomodoroApp {
     this.audio.setMuted(!this.settings.audioEnabled);
 
     // Update theme
-    const oldTheme = this.themeManager.currentTheme;
     this.themeManager.setTheme(this.settings.theme);
-
-    // Track theme change
-    if (window.umami && oldTheme !== this.settings.theme) {
-      umami.track('theme-changed', { theme: this.settings.theme });
-    }
 
     // Update exercise preferences
     this.exerciseManager.setPreferences(this.settings.exercisePreferences);
@@ -610,14 +583,6 @@ class PomodoroApp {
 
     // Calculate extension time
     const extensionMinutes = Math.floor(this.selectedExtensionExercise.breakExtension / 60);
-
-    // Track break extension
-    if (window.umami) {
-      umami.track('break-extended', {
-        exercise: this.selectedExtensionExercise.name,
-        extensionMinutes: extensionMinutes
-      });
-    }
 
     // Switch back to break mode if currently in work mode
     const wasWorkMode = this.currentMode === 'work';

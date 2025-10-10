@@ -144,22 +144,6 @@ class AudioManager {
     }
   }
 
-  /**
-   * Creates a simple notification sound that works even when page is in background
-   * Uses data URI to create an inline audio file
-   */
-  playSimpleNotification() {
-    if (this.isMuted) return;
-
-    try {
-      // Use Audio element which can play in background
-      const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBjGH0fPTgjMGHm7A7+OZURE');
-      audio.volume = 0.5;
-      audio.play().catch(err => console.error('Error playing notification:', err));
-    } catch (error) {
-      console.error('Error creating notification sound:', error);
-    }
-  }
 
   /**
    * Play a pleasant notification sound (two-tone)
@@ -201,8 +185,6 @@ class AudioManager {
    */
   playBreakComplete() {
     if (this.isMuted) return;
-
-    console.log('playBreakComplete called, document.hidden:', document.hidden);
 
     // Always show notification AND play sound
     this.showNotification('Break Complete! ⏰', 'Ready to get back to work?');
