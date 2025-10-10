@@ -39,8 +39,24 @@ class AudioManager {
   /**
    * Show browser notification (works even in background)
    */
-  showNotification(title, body) {
+  showNotification(title, body, soundType = 'default') {
     if (this.isMuted) return;
+
+    // Always play Web Audio API beeps (works in foreground and background)
+    if (soundType === 'workComplete') {
+      // Play an ascending three-tone chime
+      this.playBeep(523, 120); // C
+      setTimeout(() => this.playBeep(659, 120), 100); // E
+      setTimeout(() => this.playBeep(784, 200), 200); // G
+    } else if (soundType === 'breakComplete') {
+      // Play a simple two-tone
+      this.playBeep(600, 150);
+      setTimeout(() => this.playBeep(500, 150), 120);
+    } else {
+      // Default two-tone notification
+      this.playBeep(800, 150);
+      setTimeout(() => this.playBeep(600, 150), 100);
+    }
 
     if ('Notification' in window) {
       // Always check current permission state
@@ -48,9 +64,6 @@ class AudioManager {
 
       if (currentPermission === 'granted') {
         try {
-          // Play a sound using Audio element (works better in background)
-          this.playNotificationSound();
-
           const notification = new Notification(title, {
             body: body,
             icon: '/favicon.ico',
@@ -78,16 +91,47 @@ class AudioManager {
   }
 
   /**
-   * Play notification sound using Audio element
+   * Play notification sound using Audio element (works in background)
    */
-  playNotificationSound() {
+  playNotificationSound(soundType = 'default') {
     try {
-      // Create a simple beep sound using data URI
-      const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBjGH0fPTgjMGHm7A7+OZURE');
-      audio.volume = 0.7;
-      audio.play().catch(err => {
-        console.error('Error playing notification sound:', err);
-      });
+      // Different beep patterns for different notification types
+      const beepSound = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBjGH0fPTgjMGHm7A7+OZURE';
+
+      if (soundType === 'workComplete') {
+        // Play three beeps for work complete with longer delays
+        const audio1 = new Audio(beepSound);
+        audio1.volume = 0.7;
+        audio1.play().catch(err => console.error('Error playing sound 1:', err));
+
+        setTimeout(() => {
+          const audio2 = new Audio(beepSound);
+          audio2.volume = 0.8;
+          audio2.play().catch(err => console.error('Error playing sound 2:', err));
+        }, 200);
+
+        setTimeout(() => {
+          const audio3 = new Audio(beepSound);
+          audio3.volume = 0.9;
+          audio3.play().catch(err => console.error('Error playing sound 3:', err));
+        }, 400);
+      } else if (soundType === 'breakComplete') {
+        // Play two beeps for break complete
+        const audio1 = new Audio(beepSound);
+        audio1.volume = 0.7;
+        audio1.play().catch(err => console.error('Error playing sound 1:', err));
+
+        setTimeout(() => {
+          const audio2 = new Audio(beepSound);
+          audio2.volume = 0.6;
+          audio2.play().catch(err => console.error('Error playing sound 2:', err));
+        }, 200);
+      } else {
+        // Default single beep
+        const audio = new Audio(beepSound);
+        audio.volume = 0.7;
+        audio.play().catch(err => console.error('Error playing sound:', err));
+      }
     } catch (error) {
       console.error('Error creating notification audio:', error);
     }
@@ -167,17 +211,8 @@ class AudioManager {
   playWorkComplete() {
     if (this.isMuted) return;
 
-    // Always show notification AND play sound
-    // If page is hidden, user gets notification
-    // If page is visible, user gets both notification and richer audio
-    this.showNotification('Work Session Complete! 🎉', 'Time for a quick exercise to unlock your break!');
-
-    if (!document.hidden) {
-      // Play an ascending three-tone chime for foreground
-      this.playBeep(523, 120); // C
-      setTimeout(() => this.playBeep(659, 120), 100); // E
-      setTimeout(() => this.playBeep(784, 200), 200); // G
-    }
+    // Always show notification with sound
+    this.showNotification('Work Session Complete! 🎉', 'Time for a quick exercise to unlock your break!', 'workComplete');
   }
 
   /**
@@ -186,14 +221,8 @@ class AudioManager {
   playBreakComplete() {
     if (this.isMuted) return;
 
-    // Always show notification AND play sound
-    this.showNotification('Break Complete! ⏰', 'Ready to get back to work?');
-
-    if (!document.hidden) {
-      // Play a simple two-tone for foreground
-      this.playBeep(600, 150);
-      setTimeout(() => this.playBeep(500, 150), 120);
-    }
+    // Always show notification with sound
+    this.showNotification('Break Complete! ⏰', 'Ready to get back to work?', 'breakComplete');
   }
 
   /**
