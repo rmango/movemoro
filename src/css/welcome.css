@@ -251,6 +251,7 @@
 .extension-header {
   margin-bottom: var(--spacing-md);
   text-align: center;
+  padding-right: 40px; /* Make room for close button */
 }
 
 .extension-title {
@@ -258,6 +259,7 @@
   font-weight: 700;
   color: var(--color-primary);
   margin-bottom: var(--spacing-sm);
+  padding-right: 0; /* Title inherits padding from header */
 }
 
 .extension-subtitle {

@@ -7,9 +7,12 @@
 
   <!-- Primary Meta Tags -->
   <title>Movemoro - Free Pomodoro Timer with Exercise Breaks | Study & Productivity Timer</title>
-  <meta name="title" content="Movemoro - Free Pomodoro Timer with Exercise Breaks | Study & Productivity Timer">
-  <meta name="description" content="Free online pomodoro timer that combines focus sessions with movement breaks. Perfect study timer and productivity tool for students and office workers. Stay active, focused, and healthy while working.">
-  <meta name="keywords" content="pomodoro timer, study timer, productivity timer, focus timer, work break timer, pomodoro technique, desk exercise, office wellness, student productivity, time management, healthy work breaks">
+  <meta name="title"
+    content="Movemoro - Free Pomodoro Timer with Exercise Breaks | Study & Productivity Timer">
+  <meta name="description"
+    content="Free online pomodoro timer that combines focus sessions with movement breaks. Perfect study timer and productivity tool for students and office workers. Stay active, focused, and healthy while working.">
+  <meta name="keywords"
+    content="pomodoro timer, study timer, productivity timer, focus timer, work break timer, pomodoro technique, desk exercise, office wellness, student productivity, time management, healthy work breaks">
   <meta name="author" content="Movemoro">
   <link rel="canonical" href="https://movemoro.com/">
 
@@ -17,7 +20,8 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://movemoro.com/">
   <meta property="og:title" content="Movemoro - Free Pomodoro Timer with Exercise Breaks">
-  <meta property="og:description" content="Free online pomodoro timer that combines focus sessions with movement breaks. Perfect for students and office workers who want to stay active and productive.">
+  <meta property="og:description"
+    content="Free online pomodoro timer that combines focus sessions with movement breaks. Perfect for students and office workers who want to stay active and productive.">
   <meta property="og:image" content="https://movemoro.com/og-image.png">
   <meta property="og:site_name" content="Movemoro">
 
@@ -25,7 +29,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://movemoro.com/">
   <meta name="twitter:title" content="Movemoro - Free Pomodoro Timer with Exercise Breaks">
-  <meta name="twitter:description" content="Free online pomodoro timer that combines focus sessions with movement breaks. Perfect for students and office workers.">
+  <meta name="twitter:description"
+    content="Free online pomodoro timer that combines focus sessions with movement breaks. Perfect for students and office workers.">
   <meta name="twitter:image" content="https://movemoro.com/og-image.png">
 
   <!-- Favicon -->
@@ -129,24 +134,35 @@
   <link rel="stylesheet" href="src/css/themes/cafe.css">
 
   <!-- Cloudflare Web Analytics -->
-  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "655331455a5948ca83351f974010c22b"}'></script>
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+    data-cf-beacon='{"token": "655331455a5948ca83351f974010c22b"}'></script>
   <!-- End Cloudflare Web Analytics -->
 </head>
 
 <body>
   <!-- SEO Content Section (hidden visually, visible to crawlers) -->
-  <header style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;">
+  <header
+    style="position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;">
     <h1>Free Pomodoro Timer with Exercise Breaks - Stay Focused & Active</h1>
-    <p>Movemoro is a free online pomodoro timer designed for students and office workers who want to boost productivity while staying healthy. Our study timer combines the proven Pomodoro Technique with movement breaks to keep you focused, active, and energized during long work or study sessions.</p>
+    <p>Movemoro is a free online pomodoro timer designed for students and office workers who want to
+      boost productivity while staying healthy. Our study timer combines the proven Pomodoro
+      Technique with movement breaks to keep you focused, active, and energized during long work or
+      study sessions.</p>
 
     <h2>Why Use a Pomodoro Timer?</h2>
-    <p>The Pomodoro Technique is a scientifically-backed time management method that breaks work into focused 25-minute intervals. This productivity timer helps students ace exams, office workers complete projects, and anyone looking to improve focus and reduce burnout.</p>
+    <p>The Pomodoro Technique is a scientifically-backed time management method that breaks work
+      into focused 25-minute intervals. This productivity timer helps students ace exams, office
+      workers complete projects, and anyone looking to improve focus and reduce burnout.</p>
 
     <h2>Perfect Study Timer for Students</h2>
-    <p>Students love Movemoro as their go-to study timer. Combat study fatigue with quick movement breaks between focus sessions. Perfect for marathon study sessions, exam prep, homework, and late-night cramming while keeping your body and mind fresh.</p>
+    <p>Students love Movemoro as their go-to study timer. Combat study fatigue with quick movement
+      breaks between focus sessions. Perfect for marathon study sessions, exam prep, homework, and
+      late-night cramming while keeping your body and mind fresh.</p>
 
     <h2>Office-Friendly Productivity Timer</h2>
-    <p>Designed for desk workers and office environments. Our work break timer includes exercises that don't require floor contact or equipment - perfect for professional settings. Reduce sedentary time, improve circulation, and boost energy without leaving your desk.</p>
+    <p>Designed for desk workers and office environments. Our work break timer includes exercises
+      that don't require floor contact or equipment - perfect for professional settings. Reduce
+      sedentary time, improve circulation, and boost energy without leaving your desk.</p>
 
     <h2>Key Features</h2>
     <ul>
@@ -224,13 +240,35 @@
         <div class="mode-display" id="modeDisplay">Work Session</div>
 
         <!-- Timer Display -->
-        <div class="timer-display">
+        <div class="timer-display" id="timerDisplayContainer">
           <div class="timer-circle">
             <svg class="progress-ring" width="280" height="280">
               <circle class="progress-ring-circle" stroke="var(--color-accent)" stroke-width="6"
                 fill="transparent" r="130" cx="140" cy="140" />
             </svg>
             <div class="timer-time" id="timerDisplay">25:00</div>
+          </div>
+        </div>
+
+        <!-- Inline Exercise Selection (hidden by default) -->
+        <div class="exercise-selection-view" id="exerciseSelectionView">
+          <h2 class="exercise-view-title">Time to Move! 💪</h2>
+          <p class="exercise-view-subtitle">Choose an exercise to unlock your break</p>
+
+          <div class="exercise-cards-inline" id="exerciseCardsInline">
+            <!-- Exercise cards will be populated by JavaScript -->
+          </div>
+
+          <div class="exercise-actions">
+            <button class="btn btn-secondary" id="regenerateBtnInline">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path
+                  d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
+              </svg>
+              Regenerate
+            </button>
+            <button class="btn btn-primary" id="confirmBtnInline" disabled>Confirm Completion</button>
           </div>
         </div>
 
@@ -247,7 +285,7 @@
 
         <!-- Controls -->
         <div class="timer-controls">
-          <div class="controls-row">
+          <div class="controls-row" id="timerControlsRow">
             <button class="btn btn-primary btn-icon" id="playPauseBtn" aria-label="Start">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="play-icon">
@@ -297,15 +335,21 @@
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
             </button>
-            <button class="btn btn-secondary btn-icon fullscreen-btn-desktop" id="fullscreenBtn" aria-label="Toggle fullscreen"
-              title="Toggle fullscreen">
+            <button class="btn btn-secondary btn-icon fullscreen-btn-desktop" id="fullscreenBtn"
+              aria-label="Toggle fullscreen" title="Toggle fullscreen">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="fullscreen-icon">
-                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="fullscreen-icon">
+                <path
+                  d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
+                </path>
               </svg>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="exit-fullscreen-icon" style="display: none;">
-                <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="exit-fullscreen-icon" style="display: none;">
+                <path
+                  d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3">
+                </path>
               </svg>
             </button>
           </div>
@@ -314,8 +358,8 @@
     </main>
   </div>
 
-  <!-- Exercise Selection Modal -->
-  <div class="modal" id="exerciseModal">
+  <!-- Exercise Selection Modal (DEPRECATED - now using inline view) -->
+  <div class="modal" id="exerciseModal" style="display: none !important;">
     <div class="modal-content">
       <h2 class="modal-title">Time to Move! 💪</h2>
       <p class="modal-subtitle">Choose an exercise to unlock your break</p>

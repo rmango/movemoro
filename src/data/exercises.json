@@ -180,6 +180,54 @@
     "benefits": "Opens hips, relieves lower back tightness"
   },
   {
+    "id": "office-016",
+    "name": "Single-Leg Desk Squats",
+    "environment": "office",
+    "category": "snack",
+    "duration": 75,
+    "difficulty": "hard",
+    "instructions": "1. Stand on right leg, lightly touching desk for balance\n2. Extend left leg slightly forward\n3. Squat down on right leg as low as possible\n4. Push back up to standing\n5. Do 8-10 reps, then switch legs",
+    "equipment": ["desk"],
+    "muscleGroups": ["quads", "glutes", "core", "balance"],
+    "benefits": "Builds single-leg strength and balance"
+  },
+  {
+    "id": "office-017",
+    "name": "Explosive Desk Push-ups",
+    "environment": "office",
+    "category": "snack",
+    "duration": 60,
+    "difficulty": "hard",
+    "instructions": "1. Hands on desk edge, walk feet back to 45-degree angle\n2. Lower chest to desk\n3. Explosively push up so hands leave desk briefly\n4. Land softly and immediately go into next rep\n5. Repeat 10-12 times",
+    "equipment": ["desk"],
+    "muscleGroups": ["chest", "triceps", "shoulders", "power"],
+    "benefits": "Builds explosive upper body power"
+  },
+  {
+    "id": "office-018",
+    "name": "Bulgarian Split Squats",
+    "environment": "office",
+    "category": "snack",
+    "duration": 75,
+    "difficulty": "hard",
+    "instructions": "1. Stand 2 feet in front of chair, facing away\n2. Place top of right foot on chair behind you\n3. Lower down into deep lunge position\n4. Push through left heel to stand\n5. Do 10-12 reps, then switch legs",
+    "equipment": ["chair"],
+    "muscleGroups": ["quads", "glutes", "hamstrings", "balance"],
+    "benefits": "Intense single-leg strength builder"
+  },
+  {
+    "id": "office-019",
+    "name": "Wall Sit with Heel Raises",
+    "environment": "office",
+    "category": "snack",
+    "duration": 60,
+    "difficulty": "hard",
+    "instructions": "1. Get into wall sit position (thighs parallel to ground)\n2. While holding wall sit, raise up onto toes\n3. Hold for 2 seconds, lower heels\n4. Repeat heel raises for 40-50 seconds\n5. Keep thighs parallel throughout",
+    "equipment": ["wall"],
+    "muscleGroups": ["quads", "calves", "core"],
+    "benefits": "Combines isometric hold with dynamic movement"
+  },
+  {
     "id": "home-001",
     "name": "Burpees",
     "environment": "home",

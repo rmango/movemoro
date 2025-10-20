@@ -26,6 +26,7 @@ class PomodoroApp {
     this.elements = {
       timerDisplay: document.getElementById('timerDisplay'),
       timerTime: document.querySelector('.timer-time'),
+      timerDisplayContainer: document.getElementById('timerDisplayContainer'),
       modeDisplay: document.getElementById('modeDisplay'),
       sessionCounter: document.getElementById('sessionCounter'),
       playPauseBtn: document.getElementById('playPauseBtn'),
@@ -43,6 +44,10 @@ class PomodoroApp {
       exerciseCards: document.getElementById('exerciseCards'),
       regenerateBtn: document.getElementById('regenerateBtn'),
       confirmBtn: document.getElementById('confirmBtn'),
+      exerciseSelectionView: document.getElementById('exerciseSelectionView'),
+      exerciseCardsInline: document.getElementById('exerciseCardsInline'),
+      regenerateBtnInline: document.getElementById('regenerateBtnInline'),
+      confirmBtnInline: document.getElementById('confirmBtnInline'),
       settingsBtn: document.getElementById('settingsBtn'),
       settingsModal: document.getElementById('settingsModal'),
       closeSettingsBtn: document.getElementById('closeSettingsBtn'),
@@ -135,9 +140,13 @@ class PomodoroApp {
     this.elements.resetBtn.addEventListener('click', () => this.resetTimer());
     this.elements.skipBtn.addEventListener('click', () => this.skipTimer());
 
-    // Exercise modal
+    // Exercise modal (keep for backwards compatibility, but will use inline view)
     this.elements.regenerateBtn.addEventListener('click', () => this.regenerateExercises());
     this.elements.confirmBtn.addEventListener('click', () => this.confirmExercise());
+
+    // Inline exercise view
+    this.elements.regenerateBtnInline.addEventListener('click', () => this.regenerateExercisesInline());
+    this.elements.confirmBtnInline.addEventListener('click', () => this.confirmExerciseInline());
 
     // Settings
     this.elements.settingsBtn.addEventListener('click', () => this.openSettings());
@@ -284,11 +293,24 @@ class PomodoroApp {
 
   showExerciseModal() {
     const exercises = this.exerciseManager.selectSnackExercises();
-    this.renderExerciseCards(exercises);
-    this.elements.exerciseModal.classList.add('active');
+    this.renderExerciseCardsInline(exercises);
+
+    // Hide timer, show inline exercise view
+    this.elements.timerDisplayContainer.classList.add('hidden');
+    this.elements.exerciseSelectionView.classList.add('active');
+
+    // Hide mode display during exercise selection
+    this.elements.modeDisplay.style.display = 'none';
+
+    // Hide only the timer control buttons (play/pause, reset, skip), keep help/settings visible
+    const timerControlsRow = document.getElementById('timerControlsRow');
+    if (timerControlsRow) {
+      timerControlsRow.style.display = 'none';
+    }
+
     this.themeManager.updateExercisePrompt();
     this.selectedExercise = null;
-    this.elements.confirmBtn.disabled = true;
+    this.elements.confirmBtnInline.disabled = true;
   }
 
   renderExerciseCards(exercises) {
@@ -322,6 +344,37 @@ class PomodoroApp {
     });
   }
 
+  renderExerciseCardsInline(exercises) {
+    this.elements.exerciseCardsInline.innerHTML = exercises.map((exercise, index) => `
+      <div class="exercise-card" data-exercise-id="${exercise.id}">
+        <div class="exercise-card-header">
+          <span class="exercise-badge ${exercise.environment}">${exercise.environment}</span>
+        </div>
+        <h3 class="exercise-name">${exercise.name}</h3>
+        <div class="exercise-meta">
+          <span class="exercise-difficulty ${exercise.difficulty}">${exercise.difficulty}</span>
+          <span>~${exercise.duration}s</span>
+        </div>
+        <p class="exercise-instructions">${exercise.instructions}</p>
+      </div>
+    `).join('');
+
+    // Add click handlers to cards
+    this.elements.exerciseCardsInline.querySelectorAll('.exercise-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        const exerciseId = card.dataset.exerciseId;
+        const exercise = exercises.find(ex => ex.id === exerciseId);
+        this.selectExerciseInline(exercise);
+
+        // Update UI
+        this.elements.exerciseCardsInline.querySelectorAll('.exercise-card').forEach(c => {
+          c.classList.remove('selected');
+        });
+        card.classList.add('selected');
+      });
+    });
+  }
+
   regenerateExercises() {
     const exercises = this.exerciseManager.selectSnackExercises();
     this.renderExerciseCards(exercises);
@@ -329,9 +382,21 @@ class PomodoroApp {
     this.elements.confirmBtn.disabled = true;
   }
 
+  regenerateExercisesInline() {
+    const exercises = this.exerciseManager.selectSnackExercises();
+    this.renderExerciseCardsInline(exercises);
+    this.selectedExercise = null;
+    this.elements.confirmBtnInline.disabled = true;
+  }
+
   selectExercise(exercise) {
     this.selectedExercise = exercise;
     this.elements.confirmBtn.disabled = false;
+  }
+
+  selectExerciseInline(exercise) {
+    this.selectedExercise = exercise;
+    this.elements.confirmBtnInline.disabled = false;
   }
 
   confirmExercise() {
@@ -342,6 +407,52 @@ class PomodoroApp {
 
     // Close modal
     this.elements.exerciseModal.classList.remove('active');
+
+    // Determine next mode (break or long break)
+    const isLongBreak = this.sessionCount > 0 && (this.sessionCount + 1) % this.settings.sessionsBeforeLongBreak === 0;
+    const breakMode = isLongBreak ? 'longBreak' : 'break';
+
+    // Store the break mode so we can restore it if user extends after timer ends
+    this.lastBreakMode = breakMode;
+
+    this.switchMode(breakMode);
+
+    // Track break start
+    const breakDuration = isLongBreak ? this.settings.longBreakDuration : this.settings.breakDuration;
+    this.currentBreakStartDuration = breakDuration;
+
+    // Reset break extension flag
+    this.breakExtensionShown = false;
+
+    // Auto-start break
+    this.startTimer();
+
+    // Show break extension panel after a short delay
+    setTimeout(() => {
+      if (this.currentMode === 'break' || this.currentMode === 'longBreak') {
+        this.showBreakExtensionPanel();
+      }
+    }, 2000); // Show after 2 seconds into the break
+  }
+
+  confirmExerciseInline() {
+    if (!this.selectedExercise) return;
+
+    // Record completion
+    this.exerciseManager.recordCompletion(this.selectedExercise);
+
+    // Hide inline exercise view, show timer
+    this.elements.exerciseSelectionView.classList.remove('active');
+    this.elements.timerDisplayContainer.classList.remove('hidden');
+
+    // Show mode display again
+    this.elements.modeDisplay.style.display = '';
+
+    // Show timer control buttons again
+    const timerControlsRow = document.getElementById('timerControlsRow');
+    if (timerControlsRow) {
+      timerControlsRow.style.display = '';
+    }
 
     // Determine next mode (break or long break)
     const isLongBreak = this.sessionCount > 0 && (this.sessionCount + 1) % this.settings.sessionsBeforeLongBreak === 0;

@@ -323,15 +323,21 @@
   font-family: var(--font-body);
   font-size: 1rem;
   padding: var(--spacing-md);
-  border: 1px solid #BDC3C7;
+  border: 2px solid var(--color-text-light);
   border-radius: var(--radius-md);
-  transition: border-color var(--transition-fast);
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition: all var(--transition-fast);
+}
+
+.form-group input[type="number"]:hover {
+  border-color: var(--color-secondary);
 }
 
 .form-group input[type="number"]:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 10%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 20%, transparent);
 }
 
 .checkbox-group label {
@@ -356,17 +362,22 @@
   font-family: var(--font-body);
   font-size: 1rem;
   padding: var(--spacing-md);
-  border: 1px solid #BDC3C7;
+  border: 2px solid var(--color-text-light);
   border-radius: var(--radius-md);
-  background: white;
+  background: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
-  transition: border-color var(--transition-fast);
+  transition: all var(--transition-fast);
+}
+
+.theme-select:hover {
+  border-color: var(--color-secondary);
 }
 
 .theme-select:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 10%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 20%, transparent);
 }
 
 /* Responsive */

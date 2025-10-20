@@ -79,25 +79,34 @@ class ExerciseManager {
     officeExercises = this.filterExercises(officeExercises);
     homeExercises = this.filterExercises(homeExercises);
 
-    // Fallback if filtering removes all exercises - relax difficulty requirement only
+    // Fallback strategy: relax filters in order of priority
+    // 1. First try without history filtering
+    // 2. Then relax floor/equipment filters
+    // 3. Last resort: relax difficulty (but keep difficulty consistent if possible)
+
     if (officeExercises.length === 0) {
+      // Try relaxing floor and equipment filters but keep difficulty
       officeExercises = this.exercises.filter(e => e.environment === 'office' && e.category === 'snack');
-      // Re-apply non-difficulty filters
-      if (this.preferences?.excludeFloorExercises) {
-        officeExercises = officeExercises.filter(e => !this.isFloorExercise(e));
+      if (this.preferences?.difficulty && this.preferences.difficulty !== 'any') {
+        officeExercises = officeExercises.filter(e => e.difficulty === this.preferences.difficulty);
       }
-      if (this.preferences?.excludeEquipment) {
-        officeExercises = officeExercises.filter(e => !e.equipment || e.equipment.length === 0);
+
+      // If still empty, relax everything except environment
+      if (officeExercises.length === 0) {
+        officeExercises = this.exercises.filter(e => e.environment === 'office' && e.category === 'snack');
       }
     }
+
     if (homeExercises.length === 0) {
+      // Try relaxing floor and equipment filters but keep difficulty
       homeExercises = this.exercises.filter(e => e.environment === 'home' && e.category === 'snack');
-      // Re-apply non-difficulty filters
-      if (this.preferences?.excludeFloorExercises) {
-        homeExercises = homeExercises.filter(e => !this.isFloorExercise(e));
+      if (this.preferences?.difficulty && this.preferences.difficulty !== 'any') {
+        homeExercises = homeExercises.filter(e => e.difficulty === this.preferences.difficulty);
       }
-      if (this.preferences?.excludeEquipment) {
-        homeExercises = homeExercises.filter(e => !e.equipment || e.equipment.length === 0);
+
+      // If still empty, relax everything except environment
+      if (homeExercises.length === 0) {
+        homeExercises = this.exercises.filter(e => e.environment === 'home' && e.category === 'snack');
       }
     }
 
