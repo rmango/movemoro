@@ -25,6 +25,8 @@
   position: absolute;
   top: 0;
   left: 0;
+  width: 280px;
+  height: 280px;
   transform: rotate(-90deg);
 }
 
